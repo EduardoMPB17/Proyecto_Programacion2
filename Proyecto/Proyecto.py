@@ -1,9 +1,29 @@
-v=("hola mundo")
-def __init__(self, Rut, Nombre, ApellidoPaterno, ApellidoMaterno, Edad, CorreoElectronico):
-        # Parámetros
-        self.Rut = Rut # parametros
-        self.Nombre = Nombre#
-        self.ApellidoPaterno = ApellidoPaterno
-        self.ApellidoMaterno = ApellidoMaterno
-        self.Edad = Edad
-        self.CorreoElectronico = CorreoElectronico
+from ctypes import wstring_at
+from dataclasses import dataclass
+import csv
+
+with open('indicator.csv', newline='') as csvfile:
+    spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+    for row in spamreader:
+        print(', '.join(row))
+
+
+
+# @dataclass
+# class vehiculo:
+#     barco:str
+#     tren:str
+#     avion:str
+#     camion:str
+    
+#     if __name__ == '__main__':
+        
+
+# class Contendor:
+#     normal_pequeño:str
+#     normal_grande:str
+#     refrigarado_pequeño:str
+#     refrigarado_grande:str
+#     estanque_liquidos:str
+#     estanque_liquidos_inflamables:str
+#     if __name__ == '__main__':
