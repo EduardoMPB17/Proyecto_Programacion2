@@ -1,11 +1,76 @@
-from ctypes import wstring_at
 from dataclasses import dataclass
 import csv
 
-with open('indicator.csv', newline='') as csvfile:
-    spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-    for row in spamreader:
-        print(', '.join(row))
+
+@dataclass#se ve de  mejor manera las clases y mas ordenadas
+class ContenedorNormal_Pequeño():
+    Id = int
+    Nombre_producto = str
+    Tipo = str
+    Masa = str
+    Peso = int
+
+class ContenedorNormal_Grande():
+    Id = int
+    Nombre_producto = str
+    Tipo = str
+    Masa = str
+    Peso = int
+
+class ContenedorRefrigerado_Pequeño():
+    Id = int
+    Nombre_producto = str
+    Tipo = str
+    Masa = str
+    Peso = int
+
+class ContenedorRefrigerado_Grande():
+    Id = int
+    Nombre_producto = str
+    Tipo = str
+    Masa = str
+    Peso = int
+
+class Estanque_liquidos():
+    Id = int
+    Nombre_producto = str
+    Tipo = str
+    Masa = str
+    Peso = int
+
+class Estanque_liquidos_inflamables():
+    Id = int
+    Nombre_producto = str
+    Tipo = str
+    Masa = str
+    Peso = int
+
+
+#Abre el archivo lo lee y guarda en una lista 
+with open('ejemplo_lista.csv', newline='') as csvfile:
+    lista = []
+    lector = csv.reader(csvfile, delimiter=' ', quotechar='|')
+    for row in lector:
+        lista.append(row)
+        print(lista)
+
+print("================================================")
+for rw in lista:
+    for elemento in rw:
+        print(elemento, end=' \n')#para verlo mejor
+print(lista)
+
+indice=0
+
+
+
+x = ContenedorNormal_Grande(elemento[0]) 
+print(x)
+
+""" def 
+    for i in len(elemento[indice]):
+        
+        """
 
 
 
