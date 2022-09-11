@@ -3,47 +3,47 @@ import csv
 
 
 @dataclass#se ve de  mejor manera las clases y mas ordenadas
-class ContenedorNormal_Pequeño():
-    Id = int
-    Nombre_producto = str
-    Tipo = str
-    Masa = str
-    Peso = int
-
-class ContenedorNormal_Grande():
-    Id = int
-    Nombre_producto = str
-    Tipo = str
-    Masa = str
-    Peso = int
-
-class ContenedorRefrigerado_Pequeño():
-    Id = int
-    Nombre_producto = str
-    Tipo = str
-    Masa = str
-    Peso = int
-
-class ContenedorRefrigerado_Grande():
-    Id = int
-    Nombre_producto = str
-    Tipo = str
-    Masa = str
-    Peso = int
-
-class Estanque_liquidos():
-    Id = int
-    Nombre_producto = str
-    Tipo = str
-    Masa = str
-    Peso = int
-
-class Estanque_liquidos_inflamables():
-    Id = int
-    Nombre_producto = str
-    Tipo = str
-    Masa = str
-    Peso = int
+class ContenedorNormal_Pequeño:
+    Id : int
+    Nombre_producto : str
+    Tipo : str
+    Masa : str
+    Peso : int
+@dataclass
+class ContenedorNormal_Grande:
+    Id : int
+    Nombre_producto : str
+    Tipo : str
+    Masa : str 
+    Peso : int 
+@dataclass
+class ContenedorRefrigerado_Pequeño:
+    Id : int
+    Nombre_producto : str
+    Tipo : str
+    Masa : str
+    Peso : int
+@dataclass
+class ContenedorRefrigerado_Grande:
+    Id : int 
+    Nombre_producto : str 
+    Tipo : str 
+    Masa : str 
+    Peso : int 
+@dataclass
+class Estanque_liquidos:
+    Id : int 
+    Nombre_producto : str 
+    Tipo : str 
+    Masa : str 
+    Peso : int 
+@dataclass
+class Estanque_liquidos_inflamables:
+    Id : int 
+    Nombre_producto : str 
+    Tipo : str 
+    Masa : str 
+    Peso : int 
 
 
 #Abre el archivo lo lee y guarda en una lista 
@@ -54,20 +54,23 @@ with open('ejemplo_lista.csv', newline='') as csvfile:
         lista.append(row)
         print(lista)
 
-print("================================================")
+print("::::::::::::::::::::::::::::::::::::::::::::::::")
 for rw in lista:
     for elemento in rw:
-        print(elemento, end=' \n')#para verlo mejor
-print(lista)
+        print(elemento)#para verlo mejor
+        
 
-indice=0
+for i in lista[3]:
+    print(i)
 
 
 
-x = ContenedorNormal_Grande(elemento[0]) 
+
+""" x = ContenedorNormal_Grande(98,"s","j","t",3)
+
 print(x)
-
-""" def 
+ """
+"""  """  """
     for i in len(elemento[indice]):
         
         """
@@ -81,7 +84,7 @@ print(x)
 #     avion:str
 #     camion:str
     
-#     if __name__ == '__main__':
+#     if __name__ :: '__main__':
         
 
 # class Contendor:
@@ -91,4 +94,4 @@ print(x)
 #     refrigarado_grande:str
 #     estanque_liquidos:str
 #     estanque_liquidos_inflamables:str
-#     if __name__ == '__main__':
+#     if __name__ :: '__main__':
