@@ -9,6 +9,7 @@ class Producto:
     Masa : str
     Peso : int
 
+
 @dataclass#se ve de  mejor manera las clases y mas ordenadas
 class ContenedorNormal_Pequeño:
     Id : int
@@ -70,35 +71,3 @@ for rw in lista:
 for i in lista[3]:
     print(i)
 
-
-
-
-""" x = ContenedorNormal_Grande(98,"s","j","t",3)
-
-print(x)
- """
-"""  """  """
-    for i in len(elemento[indice]):
-        
-        """
-
-
-
-# @dataclass
-# class vehiculo:
-#     barco:str
-#     tren:str
-#     avion:str
-#     camion:str
-    
-#     if __name__ :: '__main__':
-        
-
-# class Contendor:
-#     normal_pequeño:str
-#     normal_grande:str
-#     refrigarado_pequeño:str
-#     refrigarado_grande:str
-#     estanque_liquidos:str
-#     estanque_liquidos_inflamables:str
-#     if __name__ :: '__main__':
