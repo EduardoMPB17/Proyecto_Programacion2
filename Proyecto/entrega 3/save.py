@@ -1,22 +1,18 @@
 from dataclasses import dataclass
 from distutils.log import info
-from time import monotonic
-from tkinter import filedialog, ttk
+from tkinter import filedialog, ttk,messagebox
 from tkinter import *
-
+from fpdf import FPDF
 from PIL import Image, ImageTk
 import csv
-import os
-import sys
 import pyautogui
 from matplotlib.pyplot import grid
-from numpy import size
 import mysql.connector
 
 #  ... Base de la Interfaz Gráfica ...   #
 root = Tk()
 root.title("CSV"); root.config(bg="#454545")
-root.geometry("1240x1000")
+root.attributes("-fullscreen",True)
 root.resizable(True, True)
 
 
@@ -93,7 +89,7 @@ class ContenedorR(Transporte):
             self.tamanho = "grande"
 
 
- 
+
 @dataclass
 class Estanque(Transporte):
 
@@ -274,23 +270,25 @@ with open(file) as elements:
                 conexion.commit()#confirma la consultas sql
                 
     print("se insertaron los datos correctamente")
-    cursorSelect.execute("select * from personas")#ejecuta la consultas a BD
+    cursorSelect.execute("SELECT * FROM personas")#ejecuta la consultas a BD
     
-    lista_bd=[]
-    for row in cursorSelect:
+    #-----------------------------------------------------
+    lista_bd=[];all=[]; total=0
+    
+    for row in cursorSelect:#
         print(row)
         lista_bd.append(row)
-    print("aqui",lista_bd)
-    print("="*45)
-
+    print("="*45)#
+    r_list = []
+    for tupla in lista_bd:#pasa las tuplas a lista en otra lista
+        t_list = list(tupla)
+        r_list.append(t_list)
+        #print(r_list)probar la matriz
+    
+    for product in r_list:        
+        all.append(product)
+        total += int(product[4])
         
-"""         
-        try:
-            all.append(product)
-            total += int(product[4])
-        except Exception as e:
-            print("Se encontró un string")
-
     for x in range(len(all)):
         for y in range(len(all[x])):
             if all[x][2] == "normal" and all[x][3] == "solida":
@@ -327,7 +325,7 @@ with open(file) as elements:
                     
             elif all[x][2] == "inflamable" and all[x][3] == "gas":
                 if all[x][y] == all[x][4]:
-                    c9+= int(all[x][4]) """
+                    c9+= int(all[x][4])
                         
 
 cn1 = ns.cContenedores(c1)
@@ -371,32 +369,94 @@ def loadIMG(IMG):
     return image
 
 
-
 #-----------------------------#
 #    ... Interfaz ...         #
 #-----------------------------#
-# Etiquetas de información de cada vehÍculo
+# 
 
-
-# Aquí va la información de cada vehículo, para luego colocarla en las etiquetas
-infoBarco= f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:....\nTonelaje Total de Productos: {toneBar} ton.\nTonelaje por tipo de Producto:\nTonelaje por Masa"
-infoTren= f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:....\nTonelaje Total de Productos: {toneTr} ton.\nTonelaje por tipo de Producto:\nTonelaje por Masa"
-infoAvion= f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:....\nTonelaje Total de Productos: {toneAv} ton.\nTonelaje por tipo de Producto:\nTonelaje por Masa"
-infoCamion= f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:....\nTonelaje Total de Productos: {toneCs} ton.\nTonelaje por tipo de Producto:\nTonelaje por Masa"
-
+#---------------------------------#
+# --- Funciones de la interfaz ---#  
 
 # Funciones de info de transporte 
 def botonInfoB():
-    texto = Label(root, text=infoBarco,width=30,height=20,bg="pale turquoise").grid(row= 4,column=1)
+    texto = Label(root, text=infoBarco,width=44,height=20,bg="pale turquoise").grid(row= 4,column=1)
 def botonInfoT():
-    texto = Label(root, text=infoTren,width=30,height=20,bg="pale turquoise").grid(row= 4,column=2)
+    texto = Label(root, text=infoTren,width=44,height=20,bg="pale turquoise").grid(row= 4,column=2)
 def botonInfoA():
-    texto = Label(root, text=infoAvion,width=30,height=20,bg="pale turquoise").grid(row= 4,column=3)
+    texto = Label(root, text=infoAvion,width=44,height=20,bg="pale turquoise").grid(row= 4,column=3)
 def botonInfoC():
-    texto = Label(root, text=infoCamion,width=30,height=20,bg="pale turquoise").grid(row= 4,column=4)
+    texto = Label(root, text=infoCamion,width=44,height=20,bg="pale turquoise").grid(row= 4,column=4)
 
 
-# Botones
+#funcion del boton para exportar a PDF
+def exportarPDF():
+    #pdf
+    screenshot = pyautogui.screenshot(region=(30, 110, 1450, 910))#dimensiones de la captura
+    sc= screenshot.save("captura.png")#guarda captura
+    screenshot.show
+    pdf = FPDF(orientation='P', unit = 'mm', format='A4')
+    pdf.add_page()
+    #pag 1 barco
+    pdf.set_font('Arial', 'B', 16)
+    pdf.cell(60)
+    pdf.cell(80, 10, 'Informacion de Contenedores', 1, 1, 'C')
+    pdf.image("captura.png",w=195,h=250)#pone captura con dimensiones acorde al pdf
+    
+    #salida a pdf
+    pdf.output('Informacion.pdf', 'F')
+    
+
+#funcion del boton de cambiar costos
+def CambiaCostos():
+    ventana=Tk()#ventana emergente
+    ventana.title ("Modificar Costos")
+    ventana.geometry("400x400+1500+200")#dimensiones
+    
+    def cambia():
+        x1 = int(caja1.get()) #obtiene los entry del tkinter    
+        x2 = int(caja2.get())
+        x3 = int(caja3.get())     
+        x4 = int(caja4.get())     
+        tren.costo = x1#se supone que cambia los costos
+        barco.costo = x2
+        avion.costo = x3
+        camion.costo = x4
+        #totalSUM(tnormal, trefrigerado, tliquido)
+        messagebox.showinfo(message=f"El Costo del Tren ahora es:{tren.costo}\nEl Costo del Barco ahora es:{barco.costo}\nEl Costo del Avion ahora es:{avion.costo}\nEL Costo del Camion ahora es:{camion.costo}",title= "Costos Actualizados")
+        ventana.destroy()#cierra la ventana
+        
+    etiqueta = Label(ventana,text="Ingresa Los Nuevos Costos $", font=("Arial"),bg="wheat1")
+    etiqueta1 = Label(ventana, text="Tren",bg="darkolivegreen1")
+    caja1 = Entry(ventana)
+    
+    etiqueta2 = Label(ventana, text="Barco",bg="darkolivegreen1")
+    caja2 = Entry(ventana)
+    
+    etiqueta3 = Label(ventana, text="Avion",bg="darkolivegreen1")
+    caja3 = Entry(ventana)
+    
+    etiqueta4 = Label(ventana, text="Camion",bg="darkolivegreen1")
+    caja4 = Entry(ventana)
+    
+    boton1 = Button(ventana, text="Aplicar Cambios",command=cambia)
+    
+    #orden del los label
+    etiqueta.pack(padx=5,pady=5)
+    etiqueta1.pack(padx=5,pady=5)
+    caja1.pack(padx=5,pady=5)
+    etiqueta2.pack(padx=5,pady=5)
+    caja2.pack(padx=5,pady=5)
+    etiqueta3.pack(padx=5,pady=5)
+    caja3.pack(padx=5,pady=5)
+    etiqueta4.pack(padx=5,pady=5)
+    caja4.pack(padx=5,pady=5)
+    boton1.pack(padx=5,pady=5)
+    ventana.mainloop()
+
+#---------------------------------#
+# --- Botones ---#  
+
+# Botones de Imganes de los vehiculos
 b = loadIMG("barco.png")
 ba = ImageTk.PhotoImage(b)
 v1 = Button(root, image=ba, command=botonInfoB).grid(row=2,column=1)
@@ -414,36 +474,55 @@ ca = ImageTk.PhotoImage(c)
 v4 = Button(root, image = ca,command=botonInfoC).grid(row=2, column=4)
 
 # Botón abre csv
-op = Button(root, text="Abrir otro Archivo", bg="green", width=20, height=5,borderwidth=5, relief="groove", command=openfile).grid(row=0, column=1)
+op = Button(root, text="Abrir otro Archivo", bg="green", width=20, height=4,borderwidth=5, relief="groove", command=openfile).grid(row=0, column=1)
 
+#Boton cierra en pantalla completo
+close = Button(root, text="X", bg="red",width=4,height=2,command=root.destroy).place(x=1880,y=0)
+
+#boton cambia costo abre nueva ventana
+cambiaC_T = Button(root, text="Modificar costos", bg="yellow2", width=15, height=2,borderwidth=10,command=CambiaCostos).grid(row=1, column=5)
+
+#boton exportarpdf
+pdf = Button(root, text="Exportar a PDF", bg="red", width=15, height=2 , borderwidth=10,command=exportarPDF).grid(row=0,column=4)
+
+#---------------------------------#
+# --- Etiquetas ---#  
+
+#Variables de información de cada vehÍculo , Aquí va la información de cada vehículo(se muestran al presionar una imagen)
+infoBarco= f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:....\nTonelaje Total de Productos: {toneBar} ton.\nTonelaje por tipo de Producto:\nTonelaje por Masa"
+infoTren= f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:....\nTonelaje Total de Productos: {toneTr} ton.\nTonelaje por tipo de Producto:\nTonelaje por Masa"
+infoAvion= f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:....\nTonelaje Total de Productos: {toneAv} ton.\nTonelaje por tipo de Producto:\nTonelaje por Masa"
+infoCamion= f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:....\nTonelaje Total de Productos: {toneCs} ton.\nTonelaje por tipo de Producto:\nTonelaje por Masa"
 
 # Label de informacion
-labelti= Label(root, text="Optimizador de Contenedores\n1):Seleccione un archivo\n2):Luego toque una Imagen para ver mas Información",bg="pale green", width=50, height=5,font=('Helvetica', 14, 'bold')).place(x=250,y=0)
+labelti= Label(root, text="Optimizador de Contenedores\n1):Seleccione un archivo\n2):Toque una Imagen para ver mas Información",bg="pale green", width=40, height=3,font=('Helvetica', 14, 'bold')).place(x=280,y=0)
 
-
+# labelCostos
+labelCostos = Label(root, text="Toque el Boton de abajo\n para modificar los costos", bg="aqua", width=30, height=5 ).grid(row=0,column=5) 
 
 #x = total(tnormal, trefrigerado, tliquido)
-labelCantidatT = Label(root, text=f"Cantidad total de Vehículos es: {totalVeh}", bg="tomato2", width=40, height=5, borderwidth=5, relief="groove").grid(row=0,column=4)
+#label de vehiculos totales
+labelCantidatT = Label(root, text=f"Cantidad total de Vehículos es: {totalVeh}", bg="skyblue1", width=30, height=5, relief="flat").grid(row=6,column=3)
 
 # Label de totales de vehículo
-labelCBarco = Label(root, text=f"La cantidad Total de Barcos Es: {bs}", bg="aquamarine",width=30, height=4, font=("Arial",10,'bold')).grid(row=1,column=1)
-labelCTren = Label(root, text=f"La cantidad Total de Trenes Es: {ts}", bg="aquamarine",width=30, height=4, font=("Arial",10,'bold')).grid(row=1,column=2)
-labelCAvion = Label(root, text=f"La cantidad Total de Aviones Es: {ar}", bg="aquamarine",width=30, height=4, font=("Arial",10,'bold')).grid(row=1,column=3)
-labelCCamion = Label(root, text=f"La cantidad Total de Camiones Es: {cs}", bg="aquamarine",width=30, height=4, font=("Arial",10,'bold')).grid(row=1,column=4)
+labelCBarco = Label(root, text=f"La cantidad Total de Barcos Es: {bs}", bg="aquamarine",width=30, height=2, font=("Arial",10,'bold')).grid(row=1,column=1)
+labelCTren = Label(root, text=f"La cantidad Total de Trenes Es: {ts}", bg="aquamarine",width=30, height=2, font=("Arial",10,'bold')).grid(row=1,column=2)
+labelCAvion = Label(root, text=f"La cantidad Total de Aviones Es: {ar}", bg="aquamarine",width=30, height=2, font=("Arial",10,'bold')).grid(row=1,column=3)
+labelCCamion = Label(root, text=f"La cantidad Total de Camiones Es: {cs}", bg="aquamarine",width=30, height=2, font=("Arial",10,'bold')).grid(row=1,column=4)
 
 
 # Label de información..
-labelinfoB = Label(root, text="Información del Barco:", bg="cyan", width=30, height=3, font=("Arial",12,'bold')).grid(row=3,column=1)
-labelinfoT = Label(root, text="Información del Tren:", bg="mediumpurple", width=30, height=3, font=("Arial",12,'bold')).grid(row=3,column=2)
-labelinfoA = Label(root, text="Información del Avión:", bg="pink", width=30, height=3, font=("Arial",12,'bold')).grid(row=3,column=3)
-labelinfoC = Label(root, text="Información del Camión:", bg="orange", width=30, height=3, font=("Arial",12,'bold')).grid(row=3,column=4)
+labelinfoB = Label(root, text="Información del Barco:", bg="cyan", width=30, height=2, font=("Arial",12,'bold')).grid(row=3,column=1)
+labelinfoT = Label(root, text="Información del Tren:", bg="mediumpurple", width=30, height=2, font=("Arial",12,'bold')).grid(row=3,column=2)
+labelinfoA = Label(root, text="Información del Avión:", bg="pink", width=30, height=2, font=("Arial",12,'bold')).grid(row=3,column=3)
+labelinfoC = Label(root, text="Información del Camión:", bg="orange", width=30, height=2, font=("Arial",12,'bold')).grid(row=3,column=4)
 
 # Costos paraciales de cada vehículo
 parciales = f"\nBarcos:$ {barcoCosto}\nTren:$ {trenCosto}\nAvion:$ {avionCosto}\nCamion:$ {camionCosto}"
-# Label de costo
-labelCostoTotal = Label(root, text=f"Costo Total:$ {monto} Pesos", bg="gold2", width=30, height=3, font=("Arial",12,'bold')).grid(row=6,column=1)
-labelTotalesP= Label(root, text=f"Total Costos Parciales: {parciales}", bg="gold1", width=30, height=5, font=("Arial",12,'bold')).grid(row=6,column=2)
 
+# Label de costo
+labelCostoTotal = Label(root, text=f"Costo Total:$ {monto} Pesos", bg="gold2", width=30, height=2, font=("Arial",12,'bold')).grid(row=6,column=1)
+labelTotalesP= Label(root, text=f"Total Costos Parciales: {parciales}", bg="gold1", width=30, height=5, font=("Arial",12,'bold')).grid(row=6,column=2)
 
 # Bucle principal de la interfaz gráfica
 root.mainloop()
