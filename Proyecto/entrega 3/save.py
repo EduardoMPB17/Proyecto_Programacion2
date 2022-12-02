@@ -213,6 +213,14 @@ def totalSUM(a, b, c):
     camionCosto = cs * camion.costo
     return
 
+""" def totalSUM2(a, b, c):
+    global totalVeh, bs, ts, ar, cs, monto, toneBar, toneTr, toneAv, toneCs, barcoCosto, trenCosto, avionCosto, camionCosto
+    totalVeh = 0
+    bs = 0; ts = 0; ar = 0; cs = 0
+    empty = []
+    for x in 
+"""
+
 #-----Conexion SQL --------------------------------
 conexion=mysql.connector.connect(host="db.inf.uct.cl",#base de datos
                                 user="A2022_emariqueo",
@@ -239,6 +247,7 @@ def openfile():
         print("Error, no se abrió ningún archivo")
 
 
+
 # Lo usamos más abajo, esta función es la de arriba y solo devolverá el nombre del archivo
 # Ya que si no lo filtrabamos, filedialog nos devolvería el directorio completo.
 file = openfile()
@@ -257,17 +266,17 @@ c7 = 0; c8 = 0; c9 = 0
 with open(file) as elements:
     next(elements)#omite el encabezado
     reader = csv.reader(elements)
+    print("Insertando .........................")
     for product in elements:
-                productS = product.split(",")
-                id = productS[0]#valores
-                nombre = productS[1]
-                tipo = productS[2]
-                masa = productS[3]
-                peso = productS[4]
-                
-                cursor.execute(f"INSERT INTO personas(id,nombre,tipo,masa,peso) VALUES ('{id}','{nombre}','{tipo}','{masa}','{peso}')")
-                conexion.commit()#confirma la consultas sql
-                
+        productS = product.split(",")
+        id = productS[0]#valores
+        nombre = productS[1]
+        tipo = productS[2]
+        masa = productS[3]
+        peso = productS[4]
+        cursor.execute(f"INSERT INTO personas(id,nombre,tipo,masa,peso) VALUES ('{id}','{nombre}','{tipo}','{masa}','{peso}')")
+        conexion.commit()#confirma la consultas sql
+        
     print("se insertaron los datos correctamente")
     cursor.execute("SELECT * FROM personas")#ejecuta la consultas a BD
     
@@ -321,7 +330,7 @@ with open(file) as elements:
             elif all[x][2] == "inflamable" and all[x][3] == "liquida":
                 if all[x][y] == all[x][4]:
                     c8+= int(all[x][4])
-                    
+
             elif all[x][2] == "inflamable" and all[x][3] == "gas":
                 if all[x][y] == all[x][4]:
                     c9+= int(all[x][4])
@@ -355,8 +364,8 @@ def main():
     trefrigerado = optimization2(r)
     tliquido = optimization2(e)
 
-
     totalSUM(tnormal, trefrigerado, tliquido)
+    
 
     #-----------------------------#
     # ... Funciones de Tkinter... #
@@ -412,6 +421,7 @@ def main():
         ventana.geometry("400x400+1500+200")#dimensiones
         
         def cambia():
+            print("Recalculando ...................")
             x1 = int(caja1.get()) #obtiene los entry del tkinter    
             x2 = int(caja2.get())
             x3 = int(caja3.get())     
@@ -441,6 +451,7 @@ def main():
         
         #orden del los label
         etiqueta.pack(padx = 5, pady = 5)
+        
         etiqueta1.pack(padx = 5, pady = 5)
         caja1.pack(padx = 5, pady = 5 )
         
@@ -492,10 +503,10 @@ def main():
     # --- Etiquetas ---#  
 
     #Variables de información de cada vehÍculo , Aquí va la información de cada vehículo(se muestran al presionar una imagen)
-    infoBarco = f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:....\nTonelaje Total de Productos: {toneBar} ton.\nTonelaje por tipo de Producto:\nTonelaje por Masa"
-    infoTren = f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:....\nTonelaje Total de Productos: {toneTr} ton.\nTonelaje por tipo de Producto:\nTonelaje por Masa"
-    infoAvion = f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:....\nTonelaje Total de Productos: {toneAv} ton.\nTonelaje por tipo de Producto:\nTonelaje por Masa"
-    infoCamion = f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:....\nTonelaje Total de Productos: {toneCs} ton.\nTonelaje por tipo de Producto:\nTonelaje por Masa"
+    infoBarco = f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:\nNormal:{n}\nRefrigerado:{r}\nLiquido:{e}\nTonelaje Total de Productos: {toneBar} ton.\nTonelaje por tipo de Producto:\nTonelaje por Masa"
+    infoTren = f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:\nNormal:{n}\nRefrigerado:{r}\nLiquido:{e}\nTonelaje Total de Productos: {toneTr} ton.\nTonelaje por tipo de Producto:\nTonelaje por Masa"
+    infoAvion = f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:\nNormal:{n}\nRefrigerado:{r}\nLiquido:{e}\nTonelaje Total de Productos: {toneAv} ton.\nTonelaje por tipo de Producto:\nTonelaje por Masa"
+    infoCamion = f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:\nNormal:{n}\nRefrigerado:{r}\nLiquido:{e}\nTonelaje Total de Productos: {toneCs} ton.\nTonelaje por tipo de Producto:\nTonelaje por Masa"
 
     # Label de informacion
     labelti = Label(root, text = "Optimizador de Contenedores\n1):Seleccione un archivo\n2):Toque una Imagen para ver mas Información", bg = "pale green", width = 40, height = 3, font = ('Helvetica', 14, 'bold')).place(x = 280, y = 0)
@@ -529,4 +540,5 @@ def main():
 
     # Bucle principal de la interfaz gráfica
     root.mainloop()
+
 main()
