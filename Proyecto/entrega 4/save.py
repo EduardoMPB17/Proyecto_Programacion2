@@ -142,7 +142,6 @@ def optimization2(cn):
     cAv = 0
     cCa = 0
     calc = 0
-    capacidad = barco.capacidad
     sumALL = 0
 
     for q in range(0, cn, barco.capacidad):
@@ -171,7 +170,6 @@ def optimization2(cn):
             pass
         else:
             cCa += 1
-    #sumALL = cBar + cTr + cAv + cCa
 
     return cBar, cTr, cAv, cCa
 
@@ -258,7 +256,7 @@ file = openfile()
 total = 0
 cBar = 0
 
-c1 = 0
+c1 = 0#xontadores
 c2 = 0
 c3 = 0
 c4 = 0
@@ -268,9 +266,8 @@ c7 = 0
 c8 = 0
 c9 = 0
 
-# Acá leemos el archivo y asignamos 9 contadores,
-# para ir filtrando por tipo + masa, según lo que requiere la entrega, también hacemos una suma total
-# y agregamos los elementos en una lista general, para futuros cálculos
+# Acá leemos el archivo, insertamos en la BD luego Leemos desde la Base de datos y asignamos 9 contadores,
+# para ir filtrando por tipo + masa, según lo que requiere la entrega
 with open(file) as elements:
     next(elements)  # omite el encabezado
     reader = csv.reader(elements)
@@ -286,7 +283,7 @@ with open(file) as elements:
             f"INSERT INTO personas(id,nombre,tipo,masa,peso) VALUES ('{id}','{nombre}','{tipo}','{masa}','{peso}')")
         conexion.commit()  # confirma la consultas sql
 
-    print("se insertaron los datos correctamente")
+    print("Se insertaron los datos correctamente")
     cursor.execute("SELECT * FROM personas")  # ejecuta la consultas a BD
 
     # -----------------------------------------------------
@@ -346,7 +343,8 @@ with open(file) as elements:
                 if all[x][y] == all[x][4]:
                     c9 += int(all[x][4])
 
-
+#aqui hacemos una suma total y agregamos los elementos en una lista general, para futuros cálculos
+#ademas usamos la interfaz grafica para representar lo calculado
 def main():
     cn1 = ns.cContenedores(c1)
     cn2 = nl.cContenedores(c2)
@@ -364,7 +362,6 @@ def main():
     r = cr1 + cr2 + cr3
     e = ei1 + ei2 + ei3
     tl = n + r + e
-
     barco.cantidad(barco.capacidad, barco.tipoV, tl)
     tren.cantidad(tren.capacidad, tren.tipoV, tl)
     avion.cantidad(avion.capacidad, avion.tipoV, tl)
@@ -395,7 +392,8 @@ def main():
     #---------------------------------#
     # --- Funciones de la interfaz ---#
 
-    # Funciones de info de transporte
+    # Funciones de info de transporte #
+
     def botonInfoB():
         texto = Label(
             root,
@@ -436,7 +434,7 @@ def main():
             row=4,
             column=4)
 
-    # funcion del boton para exportar a PDF
+    # funcion del boton para exportar a PDF#
 
     def exportarPDF():
         screenshot = pyautogui.screenshot(
@@ -467,8 +465,9 @@ def main():
             x2 = int(caja2.get())
             x3 = int(caja3.get())
             x4 = int(caja4.get())
-            tren.costo = x1  # se supone que cambia los costos
-            barco.costo = x2
+            
+            tren.costo = x1  #cambia los costos
+            barco.costo = x2 #de las clases
             avion.costo = x3
             camion.costo = x4
             messagebox.showinfo(
@@ -587,10 +586,10 @@ def main():
 
     # Variables de información de cada vehÍculo , Aquí va la información de
     # cada vehículo(se muestran al presionar una imagen)
-    infoBarco = f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:\nContenedor:\nEstanque:\n\nTonelaje Total de Productos: {toneBar} ton.\nTonelaje por tipo de Producto:\nNormal:{n}\nRefrigerado:{r}\nEstanque:{e}\n\nTonelaje por Masa:\nSolida:\nLiquida:\nGas:\n"
-    infoTren = f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:\nContenedor:\nEstanque:\n\nTonelaje Total de Productos: {toneTr} ton.\nTonelaje por tipo de Producto:\nNormal:{n}\nRefrigerado:{r}\nEstanque:{e}\n\nTonelaje por Masa:\nSolida:\nLiquida:\nGas:\n"
-    infoAvion = f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:\nContenedor:\nEstanque:\n\nTonelaje Total de Productos: {toneAv} ton.\nTonelaje por tipo de Producto:\nNormal:{n}\nRefrigerado:{r}\nEstanque:{e}\n\nTonelaje por Masa:\nSolida:\nLiquida:\nGas:\n"
-    infoCamion = f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:\nContenedor:\nEstanque:\n\nTonelaje Total de Productos: {toneCs} ton.\nTonelaje por tipo de Producto:\nNormal:{n}\nRefrigerado:{r}\nEstanque:{e}\n\nTonelaje por Masa:\nSolida:\nLiquida:\nGas:\n"
+    infoBarco = f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:\nNormal:{n}\nRefrigerado:{r}\nEstanque:{e}\n\nTonelaje Total de Productos: {toneBar} ton.\nTonelaje por tipo de Producto:\nNormal:\nRefrigerado:\nInflamable:\nTonelaje por Masa:\nSolida:\nLiquida:\nGas:\n"
+    infoTren = f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:\nNormal:{n}\nRefrigerado:{r}\nEstanque:{e}\n\nTonelaje Total de Productos: {toneTr} ton.\nTonelaje por tipo de Producto:\nNormal:\nRefrigerado:\nInflamable:\nTonelaje por Masa:\nSolida:\nLiquida:\nGas:\n"
+    infoAvion = f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:\nNormal:{n}\nRefrigerado:{r}\nEstanque:{e}\n\nTonelaje Total de Productos: {toneAv} ton.\nTonelaje por tipo de Producto:\nNormal:\nRefrigerado:\nInflamable:\nTonelaje por Masa:\nSolida:\nLiquida:\nGas:\n"
+    infoCamion = f"\nLa Lista de contenedores es:\nCantidad total de cada tipo de Contenedor es:\nNormal:{n}\nRefrigerado:{r}\nEstanque:{e}\n\nTonelaje Total de Productos: {toneCs} ton.\nTonelaje por tipo de Producto:\nNormal:\nRefrigerado:\nInflamable:\nTonelaje por Masa:\nSolida:\nLiquida:\nGas:\n"
 
     # Label de informacion
     labelti = Label(
@@ -616,7 +615,6 @@ def main():
         row=0,
         column=5)
 
-    #x = total(tnormal, trefrigerado, tliquido)
     # label de vehiculos totales
     labelCantidatT = Label(
         root,
@@ -641,6 +639,7 @@ def main():
             'bold')).grid(
         row=1,
         column=1)
+    
     labelCTren = Label(
         root,
         text=f"La cantidad Total de Trenes Es: {ts}",
@@ -653,6 +652,7 @@ def main():
             'bold')).grid(
         row=1,
         column=2)
+
     labelCAvion = Label(
         root,
         text=f"La cantidad Total de Aviones Es: {ar}",
@@ -665,6 +665,7 @@ def main():
             'bold')).grid(
         row=1,
         column=3)
+    
     labelCCamion = Label(
         root,
         text=f"La cantidad Total de Camiones Es: {cs}",
@@ -678,7 +679,7 @@ def main():
         row=1,
         column=4)
 
-    # Label de información..
+    # Label de información.
     labelinfoB = Label(
         root,
         text="Información del Barco:",
@@ -691,6 +692,7 @@ def main():
             'bold')).grid(
         row=3,
         column=1)
+    
     labelinfoT = Label(
         root,
         text="Información del Tren:",
@@ -703,6 +705,7 @@ def main():
             'bold')).grid(
         row=3,
         column=2)
+    
     labelinfoA = Label(
         root,
         text="Información del Avión:",
@@ -715,6 +718,7 @@ def main():
             'bold')).grid(
         row=3,
         column=3)
+    
     labelinfoC = Label(
         root,
         text="Información del Camión:",
@@ -759,7 +763,6 @@ def main():
 
     # Bucle principal de la interfaz gráfica
     root.mainloop()
-
 
 
 main()
